@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Disney+ Hotstar UX Case Study</title>
+  <style>
+    :root {
+      --bg: #050914;
+      --text: #f6f8ff;
+      --muted: #aab5c8;
+      --line: rgba(255,255,255,0.11);
+      --blue: #1f80e0;
+      --blue-soft: rgba(31,128,224,0.14);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(31,128,224,0.16), transparent 28%),
+        linear-gradient(180deg, #050914 0%, #060b16 100%);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1080px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(5, 9, 20, 0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 76px 0 56px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .label {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      border: 1px solid rgba(31,128,224,0.3);
+      color: #9fd1ff;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(40px, 7vw, 74px);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      margin-bottom: 18px;
+      max-width: 820px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .case-section {
+      padding: 54px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      margin-bottom: 26px;
+      max-width: 820px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: -0.045em;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .content-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.9fr) minmax(360px, 1.1fr);
+      gap: 34px;
+      align-items: start;
+    }
+
+    .media-column {
+      min-width: 0;
+    }
+
+    .carousel {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 12px;
+    }
+
+    .carousel::-webkit-scrollbar {
+      height: 7px;
+    }
+
+    .carousel::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.045);
+      border-radius: 999px;
+    }
+
+    .carousel::-webkit-scrollbar-thumb {
+      background: rgba(31,128,224,0.7);
+      border-radius: 999px;
+    }
+
+    .media-frame,
+    .single-media {
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: #08111f;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+    }
+
+    .media-frame {
+      min-width: 86%;
+      scroll-snap-align: start;
+    }
+
+    .phone-shot {
+      background: #050914;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 10px;
+      max-height: 720px;
+      overflow: hidden;
+    }
+
+    .phone-shot img {
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: 700px;
+      object-fit: contain;
+      border-radius: 14px;
+    }
+
+    .wide-shot {
+      background: #050914;
+    }
+
+    .wide-shot img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .caption {
+      padding: 11px 13px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .analysis {
+      display: grid;
+      gap: 28px;
+    }
+
+    .analysis-block h3 {
+      font-size: 21px;
+      letter-spacing: -0.025em;
+      margin-bottom: 14px;
+    }
+
+    .points {
+      list-style: none;
+      display: grid;
+      gap: 16px;
+    }
+
+    .points li {
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .points li:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .points strong {
+      display: block;
+      font-size: 15px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .points span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .improvements {
+      display: grid;
+      gap: 16px;
+    }
+
+    .improvement {
+      padding: 17px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .improvement:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .improvement h4 {
+      font-size: 16px;
+      letter-spacing: -0.01em;
+      margin-bottom: 5px;
+    }
+
+    .improvement p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .metric-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .metric-tags span {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      border: 1px solid rgba(31,128,224,0.24);
+      color: #b9ddff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    footer {
+      padding: 24px 0;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 940px) {
+      .content-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .media-frame {
+        min-width: 88%;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .container {
+        width: min(100% - 28px, 1080px);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 52px 0 42px;
+      }
+
+      .case-section {
+        padding: 42px 0;
+      }
+
+      .phone-shot {
+        max-height: 620px;
+      }
+
+      .phone-shot img {
+        max-height: 600px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#" class="logo">Hotstar UX Case Study</a>
+      <nav class="nav-links">
+        <a href="#homepage">Homepage</a>
+        <a href="#player">Video Player</a>
+        <a href="#shorts">Shorts Concept</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <span class="label">Mobile App UX Review</span>
+        <h1>Disney+ Hotstar Screen Analysis</h1>
+        <p>
+          This case study reviews three mobile app experiences from Disney+ Hotstar: the homepage,
+          the video watching screen, and a proposed short-form content discovery screen. Each screen is analysed
+          through what works well, what can be improved, and which metrics those improvements can influence.
+        </p>
+      </div>
+    </section>
+
+    <section class="case-section" id="homepage">
+      <div class="container">
+        <div class="section-head">
+          <h2>Screen 1 — Homepage</h2>
+          <p>
+            The homepage is the main discovery surface. It should help users resume content quickly,
+            explore categories, and discover new titles with minimal friction.
+          </p>
+        </div>
+
+        <div class="content-layout">
+          <div class="media-column">
+            <div class="carousel" aria-label="Homepage screenshots carousel">
+              <figure class="media-frame">
+                <div class="phone-shot">
+                  <img src="assets/homepage-1.jpeg" alt="Disney+ Hotstar homepage top section screenshot">
+                </div>
+                <figcaption class="caption">Top section: banner, navigation, and primary discovery rows.</figcaption>
+              </figure>
+
+              <figure class="media-frame">
+                <div class="phone-shot">
+                  <img src="assets/homepage-2.jpeg" alt="Disney+ Hotstar homepage lower section screenshot">
+                </div>
+                <figcaption class="caption">Lower section: watchlist, feedback prompt, and content rows.</figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <div class="analysis">
+            <div class="analysis-block">
+              <h3>3 Things I Like</h3>
+              <ul class="points">
+                <li>
+                  <strong>Easy switching between content categories</strong>
+                  <span>TV, Movies, Sports, and other category tabs reduce navigation effort and make content discovery more structured.</span>
+                </li>
+                <li>
+                  <strong>AI feature button is clearly visible</strong>
+                  <span>The AI button is easy to notice, which improves discoverability and encourages users to try AI-powered discovery.</span>
+                </li>
+                <li>
+                  <strong>“Continue Watching” is placed near the top</strong>
+                  <span>This helps users resume content quickly without searching again, making the session start faster.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="analysis-block">
+              <h3>Suggested Improvements</h3>
+              <div class="improvements">
+                <div class="improvement">
+                  <h4>Move movie/show feedback prompts higher</h4>
+                  <p>Feedback prompts currently appear too low on the homepage. Placing them higher can increase visibility and collect more user preference signals.</p>
+                  <div class="metric-tags">
+                    <span>Feedback response rate</span>
+                    <span>Recommendation accuracy</span>
+                    <span>User engagement</span>
+                    <span>Personalization effectiveness</span>
+                  </div>
+                </div>
+
+                <div class="improvement">
+                  <h4>Add a dedicated “Recommended for You” row</h4>
+                  <p>A personalized row based on watch history, genre preference, and behaviour can reduce decision fatigue and improve content discovery.</p>
+                  <div class="metric-tags">
+                    <span>Watch time</span>
+                    <span>Content CTR</span>
+                    <span>User retention</span>
+                    <span>Average session duration</span>
+                    <span>Content consumption</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" id="player">
+      <div class="container">
+        <div class="section-head">
+          <h2>Screen 2 — Video Watching Screen</h2>
+          <p>
+            The video player experience directly affects user comfort, watch time, binge-watching behaviour,
+            and whether users stay inside the platform while watching.
+          </p>
+        </div>
+
+        <div class="content-layout">
+          <div class="media-column">
+            <figure class="single-media">
+              <div class="wide-shot">
+                <img src="assets/video-player.png" alt="Recreated Hotstar video player mockup with live score card">
+              </div>
+              <figcaption class="caption">Recreated player mockup showing movie playback with live score visibility.</figcaption>
+            </figure>
+          </div>
+
+          <div class="analysis">
+            <div class="analysis-block">
+              <h3>3 Things I Like</h3>
+              <ul class="points">
+                <li>
+                  <strong>Live match scores are visible while watching</strong>
+                  <span>Users can track sports updates inside the video player instead of switching to another app.</span>
+                </li>
+                <li>
+                  <strong>“Watch Next” and auto-play improve continuity</strong>
+                  <span>The next episode or title starts smoothly, reducing friction between content and encouraging longer sessions.</span>
+                </li>
+                <li>
+                  <strong>Playback controls are easy and intuitive</strong>
+                  <span>Forward, rewind, brightness, volume, captions, and speed controls are accessible and reduce playback frustration.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="analysis-block">
+              <h3>Suggested Improvement</h3>
+              <div class="improvement">
+                <h4>Add community discussions and live reactions for reality shows</h4>
+                <p>
+                  Reality shows naturally create audience conversations. Adding live polls, fan reactions,
+                  contestant voting, and discussion threads can keep this engagement inside Hotstar instead of pushing users to external platforms.
+                </p>
+                <div class="metric-tags">
+                  <span>Session duration</span>
+                  <span>User engagement rate</span>
+                  <span>Repeat visits</span>
+                  <span>Retention rate</span>
+                  <span>DAU</span>
+                  <span>Community participation</span>
+                  <span>Time spent per episode</span>
+                  <span>Viewer loyalty</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section" id="shorts">
+      <div class="container">
+        <div class="section-head">
+          <h2>Screen 3 — Short-Form Content Discovery Concept</h2>
+          <p>
+            This is a proposed feature: a vertical, auto-playing feed for trailers, movie scenes,
+            cricket highlights, trending moments, and personalized previews.
+          </p>
+        </div>
+
+        <div class="content-layout">
+          <div class="media-column">
+            <div class="carousel" aria-label="Short-form concept mockups carousel">
+              <figure class="media-frame">
+                <div class="phone-shot">
+                  <img src="assets/shorts-feed.png" alt="Short-form content discovery feed mockup">
+                </div>
+                <figcaption class="caption">Auto-playing vertical feed view, similar to YouTube Shorts/Reels.</figcaption>
+              </figure>
+
+              <figure class="media-frame">
+                <div class="phone-shot">
+                  <img src="assets/shorts-details.png" alt="Expanded short-form content details mockup">
+                </div>
+                <figcaption class="caption">Expanded content details view with Watch Now CTA and related recommendations.</figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <div class="analysis">
+            <div class="analysis-block">
+              <h3>Concept Highlights</h3>
+              <ul class="points">
+                <li>
+                  <strong>Auto-playing vertical discovery feed</strong>
+                  <span>Users can quickly explore clips, trailers, cricket highlights, and trending scenes without browsing many rows.</span>
+                </li>
+                <li>
+                  <strong>Clear content context</strong>
+                  <span>Each clip can show title name, genre tags, trending badge, swipe hint, and a direct “Watch Now” button.</span>
+                </li>
+                <li>
+                  <strong>Faster conversion from preview to full content</strong>
+                  <span>Short clips can help undecided users discover something interesting and immediately start the full movie, show, or sports content.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="analysis-block">
+              <h3>Why This Feature Matters</h3>
+              <div class="improvement">
+                <h4>Reduce decision fatigue and improve discovery</h4>
+                <p>
+                  Users often leave streaming apps when they cannot decide what to watch. A short-form feed keeps users engaged,
+                  exposes them to more titles, and can increase long-form content starts.
+                </p>
+                <div class="metric-tags">
+                  <span>Average session duration</span>
+                  <span>DAU</span>
+                  <span>Screen engagement rate</span>
+                  <span>Scroll depth</span>
+                  <span>Content discovery rate</span>
+                  <span>Clip-to-content CTR</span>
+                  <span>Retention</span>
+                  <span>Full-content play starts</span>
+                  <span>Subscription conversion</span>
+                  <span>Ad impressions</span>
+                  <span>Long-tail catalogue consumption</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">UX Case Study Assignment • Disney+ Hotstar Mobile App Review</div>
+  </footer>
+</body>
+</html>
